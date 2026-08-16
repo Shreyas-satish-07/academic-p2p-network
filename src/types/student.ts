@@ -5,7 +5,7 @@ export interface StudentStats {
   activeProjects: number;
 }
 
-export interface Student {
+export interface DashboardStudent {
   name: string;
   term: string;
   college: string;
@@ -16,6 +16,18 @@ export interface Student {
     projectInvitations: number;
     newResources: number;
   };
+}
+
+export interface Student {
+  id: string;
+  name: string;
+  department: string;
+  semester: string;
+  skills: string[];
+  interests: string[];
+  researchAreas: string[];
+  matchPercentage: number;
+  collaborationStatus: 'open' | 'busy';
 }
 
 export interface Deadline {

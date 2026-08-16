@@ -1,7 +1,7 @@
-import type { Student, Deadline, MessageItem, RecommendedGroup, LearningProgressItem, CollaborationItem, ActivityFeedItem } from '../types/student';
+import type { DashboardStudent, Deadline, MessageItem, RecommendedGroup, LearningProgressItem, CollaborationItem, ActivityFeedItem } from '../types/student';
 import type { Peer } from '../types/peer';
 
-export const CURRENT_STUDENT: Student = {
+export const CURRENT_STUDENT: DashboardStudent = {
   name: 'Shreyas',
   term: 'SEM 1 · CSE',
   college: 'BMS COLLEGE OF ENGINEERING',

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { NAVIGATION_GROUPS } from '../../constants/navigation';
 
 interface SidebarProps {
@@ -8,6 +9,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const [isDark, setIsDark] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const isDarkClassPresent = document.documentElement.classList.contains('dark');
@@ -105,15 +107,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <div className="nav-group-label">{group.label}</div>
             <ul className="nav-list">
               {group.items.map((item, itemIdx) => {
-                const isActive = item.label === 'Dashboard';
+                const isActive = location.pathname === item.route;
                 return (
-                  <li key={itemIdx} className={`nav-item ${isActive ? 'active' : ''}`}>
+                  <Link 
+                    key={itemIdx} 
+                    to={item.route} 
+                    className={`nav-item ${isActive ? 'active' : ''}`}
+                    onClick={onClose}
+                  >
                     {renderIcon(item.iconName)}
                     {item.label}
                     {item.badge && (
                       <span className="nav-badge">{item.badge}</span>
                     )}
-                  </li>
+                  </Link>
                 );
               })}
             </ul>
