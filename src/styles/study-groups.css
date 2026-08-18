@@ -219,7 +219,7 @@
   margin-bottom: 22px;
   width: 100%;
 }
-@media (max-width: 1050px) {
+@media (max-width: 767px) {
   .pm-browse {
     grid-template-columns: 1fr;
   }
@@ -231,7 +231,7 @@
   flex-direction: column;
   gap: 16px;
 }
-@media (max-width: 1050px) {
+@media (max-width: 767px) {
   .pm-filters {
     position: static;
   }
@@ -311,7 +311,12 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
-@media (max-width: 640px) {
+@media (max-width: 1024px) {
+  .discover-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+@media (max-width: 767px) {
   .discover-grid {
     grid-template-columns: 1fr;
   }
@@ -420,12 +425,12 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .session-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
 }
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .session-grid {
     grid-template-columns: 1fr;
   }
@@ -512,7 +517,7 @@
   align-items: start;
   width: 100%;
 }
-@media (max-width: 1050px) {
+@media (max-width: 767px) {
   .profile-grid {
     grid-template-columns: 1fr;
   }
@@ -676,4 +681,22 @@
 .disc-forum-stats .l {
   font-size: 10px;
   color: var(--ink-faint);
+}
+
+/* Targeted text wrapping */
+.fg-desc,
+.dg-name,
+.session-title,
+.meeting-info .t {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Flexbox/Grid child overflow protection */
+.fg-main,
+.dg-top > div:last-child,
+.meeting-info,
+.top-group-info,
+.disc-forum-info {
+  min-width: 0;
 }
