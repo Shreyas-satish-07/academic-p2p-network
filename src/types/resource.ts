@@ -10,6 +10,10 @@ export interface Resource {
   textClass?: string;
   type?: string;
   date?: string;
+  subject?: string;
+  uploader?: string;
+  description?: string;
+  fileSize?: string;
 }
 
 

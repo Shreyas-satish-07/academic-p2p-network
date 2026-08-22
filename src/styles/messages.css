@@ -27,6 +27,7 @@
   flex-shrink: 0;
   border-right: 1px solid var(--line);
   background: var(--paper);
+  position: relative; /* For absolute FAB positioning */
 }
 
 .workspace-list-header {
@@ -285,7 +286,6 @@
 
 .activity-timeline-feed {
   flex: 1;
-  overflow-y: auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -347,18 +347,27 @@
 /* Card custom styles by timeline log type */
 .timeline-entry-card.type-announcement {
   border-left: 4px solid var(--marigold);
+  background: var(--marigold-tint);
 }
 
 .timeline-entry-card.type-file {
   border-left: 4px solid var(--pine);
+  background: var(--pine-tint);
 }
 
 .timeline-entry-card.type-meeting {
   border-left: 4px solid var(--rust);
+  background: var(--rust-tint);
 }
 
 .timeline-entry-card.type-task {
   border-left: 4px solid var(--slate);
+  background: var(--slate-tint);
+}
+
+.timeline-entry-card.type-update {
+  border-left: 4px solid var(--line);
+  background: var(--card);
 }
 
 /* Workspace Post Composer */
@@ -818,11 +827,10 @@
   color: var(--ink-faint);
 }
 
-/* ===== Floating Action Button (FAB) Menu ===== */
 .collaboration-fab-container {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -888,10 +896,15 @@
 
 /* ===== RESPONSIVE MEDIA QUERIES ===== */
 
-/* Desktop / Tablet boundary (1200px) */
-@media (max-width: 1200px) {
+@media (max-width: 1279px) {
   .msg-info-panel {
     display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .msg-list-panel {
+    width: 270px;
   }
 }
 
@@ -931,4 +944,196 @@
   .chat-composer {
     padding-right: 76px;
   }
+}
+
+/* Custom In-App Modal Dialog styles */
+.collab-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.collab-modal {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 480px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: modal-appear 0.2s ease-out;
+}
+
+@keyframes modal-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.collab-modal-title {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.collab-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.collab-modal-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.collab-modal-input,
+.collab-modal-select,
+.collab-modal-textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13.5px;
+  outline: none;
+  background: var(--paper);
+  color: var(--ink);
+  transition: border-color 0.15s ease;
+}
+
+.collab-modal-input:focus,
+.collab-modal-select:focus,
+.collab-modal-textarea:focus {
+  border-color: var(--pine);
+}
+
+.collab-modal-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.collab-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Custom Dynamic Toast styles */
+.collab-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--pine-dark);
+  color: #F6F4EC;
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: toast-fade-in 0.2s ease-out;
+}
+
+@keyframes toast-fade-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Targeted Word Wrapping Protection */
+.text-wrap-protect {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
+}
+
+/* Modal student lists scrolling utilities */
+.collab-modal-student-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.student-select-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+  min-width: 0;
+}
+
+.student-select-row:hover {
+  background: rgba(225, 153, 58, 0.05);
+}
+
+.student-avatar-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--slate-tint);
+  color: var(--slate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.student-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.student-select-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.student-select-sub {
+  font-size: 11px;
+  color: var(--ink-soft);
 }

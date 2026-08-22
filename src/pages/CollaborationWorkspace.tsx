@@ -28,6 +28,21 @@ interface MeetingItem {
   link: string;
 }
 
+interface SharedResourceItem {
+  name: string;
+  url: string;
+  category: string;
+}
+
+interface WorkspaceMember {
+  id: string;
+  name: string;
+  initials: string;
+  department: string;
+  semester: string;
+  status: 'online' | 'offline';
+}
+
 interface Workspace {
   id: string;
   name: string;
@@ -46,12 +61,34 @@ interface Workspace {
     messagesCount: number;
     meetingsCount: number;
   };
-  members: string[];
+  members: WorkspaceMember[];
   files: FileItem[];
   tasks: TaskItem[];
   meetings: MeetingItem[];
   timeline: TimelineItem[];
+  resources?: SharedResourceItem[];
 }
+
+const CURRENT_USER: WorkspaceMember = {
+  id: 'current-user',
+  name: 'You',
+  initials: 'YO',
+  department: 'CSE',
+  semester: '1',
+  status: 'online'
+};
+
+const AVAILABLE_STUDENTS: WorkspaceMember[] = [
+  { id: 's1', name: 'Rahul Sharma', initials: 'RS', department: 'CSE', semester: '1', status: 'online' },
+  { id: 's2', name: 'Priya Nair', initials: 'PN', department: 'CSE', semester: '1', status: 'online' },
+  { id: 's3', name: 'Ananya Rao', initials: 'AR', department: 'CSE', semester: '1', status: 'offline' },
+  { id: 's4', name: 'Rhea Kulkarni', initials: 'RK', department: 'ECE', semester: '2', status: 'online' },
+  { id: 's5', name: 'Amit Verma', initials: 'AV', department: 'ME', semester: '3', status: 'offline' },
+  { id: 's6', name: 'Kunal Shah', initials: 'KS', department: 'EE', semester: '1', status: 'online' },
+  { id: 's7', name: 'Sanjay M.', initials: 'SM', department: 'CSE', semester: '2', status: 'offline' },
+  { id: 's8', name: 'Nisha Gupta', initials: 'NG', department: 'ISE', semester: '1', status: 'online' },
+  { id: 's10', name: 'Shreyas Satish', initials: 'SS', department: 'CSE', semester: '1', status: 'online' }
+];
 
 const INITIAL_WORKSPACES: Workspace[] = [
   {
@@ -62,17 +99,25 @@ const INITIAL_WORKSPACES: Workspace[] = [
     icon: '📚',
     avatarBg: 'var(--marigold-tint)',
     avatarColor: 'var(--marigold)',
-    membersCount: 12,
+    membersCount: 7,
     lastActivityText: '📄 ER_Diagram.pdf uploaded',
     lastActivityTime: '15 min ago',
     unreadCount: 3,
-    deadlineText: 'Assignment due in 2 days',
+    deadlineText: '2 days remaining',
     sharedResources: {
-      filesCount: 14,
+      filesCount: 3,
       messagesCount: 32,
-      meetingsCount: 3
+      meetingsCount: 1
     },
-    members: ['Ananya Rao', 'Rahul Sharma', 'Priya Nair', 'Shreyas Satish', 'Rhea Kulkarni', 'Amit Verma', 'Sanjana Sen'],
+    members: [
+      { id: 's1', name: 'Rahul Sharma', initials: 'RS', department: 'CSE', semester: '1', status: 'online' },
+      { id: 's2', name: 'Priya Nair', initials: 'PN', department: 'CSE', semester: '1', status: 'online' },
+      { id: 's3', name: 'Ananya Rao', initials: 'AR', department: 'CSE', semester: '1', status: 'offline' },
+      { id: 's4', name: 'Rhea Kulkarni', initials: 'RK', department: 'ECE', semester: '2', status: 'online' },
+      { id: 's5', name: 'Amit Verma', initials: 'AV', department: 'ME', semester: '3', status: 'offline' },
+      { id: 's10', name: 'Shreyas Satish', initials: 'SS', department: 'CSE', semester: '1', status: 'online' },
+      CURRENT_USER
+    ],
     files: [
       { name: 'DBMS_Notes.pdf', size: '2.4 MB' },
       { name: 'ER_Diagram.pdf', size: '1.2 MB' },
@@ -105,13 +150,19 @@ const INITIAL_WORKSPACES: Workspace[] = [
     lastActivityText: 'Task completed',
     lastActivityTime: '45 min ago',
     unreadCount: 0,
-    deadlineText: 'Project Phase 1 due in 5 days',
+    deadlineText: '5 days remaining',
     sharedResources: {
-      filesCount: 14,
+      filesCount: 3,
       messagesCount: 20,
-      meetingsCount: 2
+      meetingsCount: 1
     },
-    members: ['Ananya Rao', 'Rahul Sharma', 'Priya Nair', 'Shreyas Satish', 'You'],
+    members: [
+      { id: 's1', name: 'Rahul Sharma', initials: 'RS', department: 'CSE', semester: '1', status: 'online' },
+      { id: 's2', name: 'Priya Nair', initials: 'PN', department: 'CSE', semester: '1', status: 'online' },
+      { id: 's3', name: 'Ananya Rao', initials: 'AR', department: 'CSE', semester: '1', status: 'offline' },
+      { id: 's10', name: 'Shreyas Satish', initials: 'SS', department: 'CSE', semester: '1', status: 'online' },
+      CURRENT_USER
+    ],
     files: [
       { name: 'SmartAttendance_Specs.pdf', size: '1.8 MB' },
       { name: 'UML_Documentation.pdf', size: '3.1 MB' },
@@ -144,14 +195,22 @@ const INITIAL_WORKSPACES: Workspace[] = [
     lastActivityText: '💬 Did you complete the assignment?',
     lastActivityTime: '25 min ago',
     unreadCount: 0,
+    deadlineText: 'No pending deadlines',
     sharedResources: {
       filesCount: 1,
       messagesCount: 12,
       meetingsCount: 0
     },
-    members: ['Rahul Sharma', 'You'],
+    members: [
+      { id: 's1', name: 'Rahul Sharma', initials: 'RS', department: 'CSE', semester: '1', status: 'online' },
+      CURRENT_USER
+    ],
     files: [
       { name: 'Assignment1_Draft.pdf', size: '1.1 MB' }
+    ],
+    resources: [
+      { name: 'Stanford DBMS Lecture Notes', url: '#', category: 'Lecture Notes' },
+      { name: 'Official PostgreSQL Cheat Sheet', url: '#', category: 'Reference Guide' }
     ],
     tasks: [
       { id: 't8', text: 'Complete SQL exercises', completed: false }
@@ -174,12 +233,19 @@ const INITIAL_WORKSPACES: Workspace[] = [
     lastActivityText: 'New material uploaded',
     lastActivityTime: '2h ago',
     unreadCount: 0,
+    deadlineText: '10 days remaining',
     sharedResources: {
-      filesCount: 6,
+      filesCount: 1,
       messagesCount: 8,
-      meetingsCount: 1
+      meetingsCount: 0
     },
-    members: ['Amit Verma', 'Kunal Shah', 'Rhea Kulkarni', 'Vikram Dev', 'Siddharth Rao', 'Aishwarya Nair'],
+    members: [
+      { id: 's5', name: 'Amit Verma', initials: 'AV', department: 'ME', semester: '3', status: 'offline' },
+      { id: 's4', name: 'Rhea Kulkarni', initials: 'RK', department: 'ECE', semester: '2', status: 'online' },
+      { id: 's6', name: 'Kunal Shah', initials: 'KS', department: 'EE', semester: '1', status: 'online' },
+      { id: 's1', name: 'Rahul Sharma', initials: 'RS', department: 'CSE', semester: '1', status: 'online' },
+      CURRENT_USER
+    ],
     files: [
       { name: 'OS_Lab_Manual.pdf', size: '4.2 MB' }
     ],
@@ -193,23 +259,63 @@ const INITIAL_WORKSPACES: Workspace[] = [
   }
 ];
 
+const getBlockProgressBar = (percent: number) => {
+  const totalBlocks = 10;
+  const filledBlocks = Math.round(percent / 10);
+  const emptyBlocks = totalBlocks - filledBlocks;
+  return '█'.repeat(filledBlocks) + '░'.repeat(emptyBlocks);
+};
+
 export const CollaborationWorkspace: React.FC = () => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>(INITIAL_WORKSPACES);
   const [activeWorkspaceId, setActiveWorkspaceId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'discussion' | 'files' | 'tasks' | 'meetings'>('discussion');
+  const [activeTab, setActiveTab] = useState<'discussion' | 'files' | 'tasks' | 'meetings' | 'resources'>('discussion');
   const [updateText, setUpdateText] = useState('');
   const [postType, setPostType] = useState<'update' | 'announcement' | 'file' | 'meeting'>('update');
   const [fabOpen, setFabOpen] = useState(false);
+
+  // Modal State Manager
+  const [modalType, setModalType] = useState<'direct' | 'group' | 'project' | 'research' | 'add_member' | null>(null);
+
+  // Modal Form states
+  const [newCollabName, setNewCollabName] = useState('');
+  const [newCollabDesc, setNewCollabDesc] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
+  const [selectedAddStudentIds, setSelectedAddStudentIds] = useState<string[]>([]);
+
+  // Meeting Join Modal
+  const [activeMeetingModal, setActiveMeetingModal] = useState<MeetingItem | null>(null);
+
+  // Toast alert state
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   const timelineEndRef = useRef<HTMLDivElement>(null);
 
   const activeWorkspace = workspaces.find(w => w.id === activeWorkspaceId) || null;
 
-  // Mark unread updates as read when workspace is selected
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  };
+
+  // Keep tabs correct and clear unread counts on active Workspace change
   useEffect(() => {
     if (activeWorkspaceId) {
       setWorkspaces(prev =>
         prev.map(w => (w.id === activeWorkspaceId ? { ...w, unreadCount: 0 } : w))
       );
+      
+      const currentWorkspace = workspaces.find(w => w.id === activeWorkspaceId);
+      if (currentWorkspace) {
+        const availableTabs = getTabsForCategory(currentWorkspace.category);
+        if (!availableTabs.some(t => t.id === activeTab)) {
+          setActiveTab(availableTabs[0].id as any);
+        }
+      }
     }
   }, [activeWorkspaceId]);
 
@@ -220,7 +326,6 @@ export const CollaborationWorkspace: React.FC = () => {
     }
   }, [activeWorkspace?.timeline, activeTab]);
 
-  // Post update handler
   const handlePostUpdate = () => {
     if (!updateText.trim() || !activeWorkspaceId) return;
 
@@ -275,7 +380,6 @@ export const CollaborationWorkspace: React.FC = () => {
     setUpdateText('');
   };
 
-  // Toggle tasks completion dynamically updating progress and appending timeline log
   const handleToggleTask = (taskId: string) => {
     if (!activeWorkspaceId) return;
 
@@ -318,26 +422,46 @@ export const CollaborationWorkspace: React.FC = () => {
     );
   };
 
-  // FAB Menu Actions Trigger (Mock updates)
-  const handleCreateMockCollab = (typeLabel: string, typeKey: 'direct' | 'group' | 'project' | 'research') => {
-    const id = `collab-${Date.now()}`;
-    const name = prompt(`Enter name for the new ${typeLabel}:`) || '';
-    if (!name.trim()) return;
+  const handleOpenCreateModal = (typeKey: 'direct' | 'group' | 'project' | 'research') => {
+    setModalType(typeKey);
+    setNewCollabName('');
+    setNewCollabDesc('');
+    setSearchQuery('');
+    setSelectedStudentId(null);
+    setSelectedStudentIds([]);
+    setFabOpen(false);
+  };
 
+  const handleCloseModal = () => {
+    setModalType(null);
+    setNewCollabName('');
+    setNewCollabDesc('');
+    setSearchQuery('');
+    setSelectedStudentId(null);
+    setSelectedStudentIds([]);
+    setSelectedAddStudentIds([]);
+  };
+
+  const handleCreateDM = () => {
+    if (!selectedStudentId) return;
+    const selectedStudent = AVAILABLE_STUDENTS.find(s => s.id === selectedStudentId);
+    if (!selectedStudent) return;
+
+    const id = `dm-${Date.now()}`;
     const newWorkspace: Workspace = {
       id,
-      name: name.trim(),
-      category: typeKey,
-      categoryLabel: typeLabel,
-      icon: typeKey === 'direct' ? '📩' : typeKey === 'group' ? '📚' : typeKey === 'project' ? '🚀' : '🔬',
+      name: selectedStudent.name,
+      category: 'direct',
+      categoryLabel: '📩 Direct Message',
+      icon: '📩',
       avatarBg: 'var(--slate-tint)',
       avatarColor: 'var(--slate)',
-      membersCount: typeKey === 'direct' ? 2 : 5,
+      membersCount: 2,
       lastActivityText: 'Workspace initialized.',
       lastActivityTime: 'Just now',
       unreadCount: 0,
       sharedResources: { filesCount: 0, messagesCount: 0, meetingsCount: 0 },
-      members: ['You', 'Rahul Sharma'],
+      members: [CURRENT_USER, selectedStudent],
       files: [],
       tasks: [],
       meetings: [],
@@ -346,16 +470,142 @@ export const CollaborationWorkspace: React.FC = () => {
 
     setWorkspaces(prev => [newWorkspace, ...prev]);
     setActiveWorkspaceId(id);
-    setFabOpen(false);
+    setModalType(null);
+    showToast(`Conversation started with ${selectedStudent.name}`);
   };
 
-  // Group collaborations by category
+  const handleCreateGroupProjectResearch = () => {
+    if (!newCollabName.trim() || !modalType) return;
+    const selectedStudents = AVAILABLE_STUDENTS.filter(s => selectedStudentIds.includes(s.id));
+
+    const id = `${modalType}-${Date.now()}`;
+    const categoryLabel = 
+      modalType === 'group' ? '📚 Study Group' : 
+      modalType === 'project' ? '🚀 Project Team' : '🔬 Research Discussion';
+
+    const newWorkspace: Workspace = {
+      id,
+      name: newCollabName.trim(),
+      category: modalType as any,
+      categoryLabel,
+      icon: modalType === 'group' ? '📚' : modalType === 'project' ? '🚀' : '🔬',
+      avatarBg: 
+        modalType === 'group' ? 'var(--marigold-tint)' : 
+        modalType === 'project' ? 'var(--pine-tint)' : 'var(--rust-tint)',
+      avatarColor: 
+        modalType === 'group' ? 'var(--marigold)' : 
+        modalType === 'project' ? 'var(--pine-dark)' : 'var(--rust)',
+      membersCount: 1 + selectedStudents.length,
+      lastActivityText: 'Workspace initialized.',
+      lastActivityTime: 'Just now',
+      unreadCount: 0,
+      sharedResources: { filesCount: 0, messagesCount: 0, meetingsCount: 0 },
+      members: [CURRENT_USER, ...selectedStudents],
+      files: [],
+      tasks: [],
+      meetings: [],
+      timeline: [{ id: `l-init-${Date.now()}`, time: 'Just now', type: 'announcement', text: '📌 Workspace initialized.', user: 'System' }]
+    };
+
+    setWorkspaces(prev => [newWorkspace, ...prev]);
+    setActiveWorkspaceId(id);
+    setModalType(null);
+    showToast(`${categoryLabel} created successfully!`);
+  };
+
+  const handleOpenAddMemberModal = () => {
+    setModalType('add_member');
+    setSearchQuery('');
+    setSelectedAddStudentIds([]);
+  };
+
+  const handleAddMembers = () => {
+    if (selectedAddStudentIds.length === 0 || !activeWorkspaceId) return;
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const newMembers = AVAILABLE_STUDENTS.filter(s => selectedAddStudentIds.includes(s.id));
+    const namesStr = newMembers.map(m => m.name).join(', ');
+    const logText = `👥 ${namesStr} added to the workspace by You.`;
+
+    const newLog: TimelineItem = {
+      id: `l-add-${Date.now()}`,
+      time: timeStr,
+      type: 'announcement',
+      text: logText,
+      user: 'System'
+    };
+
+    setWorkspaces(prev =>
+      prev.map(w => {
+        if (w.id === activeWorkspaceId) {
+          return {
+            ...w,
+            membersCount: w.membersCount + newMembers.length,
+            members: [...w.members, ...newMembers],
+            timeline: [...w.timeline, newLog]
+          };
+        }
+        return w;
+      })
+    );
+
+    setModalType(null);
+    showToast(`${newMembers.length} member(s) added successfully!`);
+  };
+
+  const handleDownloadFile = (filename: string) => {
+    showToast(`Download started: ${filename}`);
+  };
+
+  const handleDownloadResource = (resName: string) => {
+    showToast(`Opening resource: ${resName}`);
+  };
+
+  const handleJoinMeeting = (meet: MeetingItem) => {
+    setActiveMeetingModal(meet);
+  };
+
+  const executeJoinMeeting = () => {
+    if (activeMeetingModal) {
+      showToast(`Meeting link opened: ${activeMeetingModal.title}`);
+      setActiveMeetingModal(null);
+    }
+  };
+
+  const getTabsForCategory = (category: string) => {
+    switch (category) {
+      case 'direct':
+        return [
+          { id: 'discussion', label: 'Discussion' },
+          { id: 'files', label: 'Shared Files' },
+          { id: 'resources', label: 'Shared Resources' }
+        ];
+      case 'research':
+        return [
+          { id: 'discussion', label: 'Discussion' },
+          { id: 'files', label: 'Research/Papers' },
+          { id: 'tasks', label: 'Tasks' },
+          { id: 'meetings', label: 'Meetings' }
+        ];
+      case 'group':
+      case 'project':
+      default:
+        return [
+          { id: 'discussion', label: 'Discussion' },
+          { id: 'files', label: 'Files' },
+          { id: 'tasks', label: 'Tasks' },
+          { id: 'meetings', label: 'Meetings' }
+        ];
+    }
+  };
+
   const directList = workspaces.filter(w => w.category === 'direct');
   const groupList = workspaces.filter(w => w.category === 'group');
   const projectList = workspaces.filter(w => w.category === 'project');
   const researchList = workspaces.filter(w => w.category === 'research');
 
-  // Helper to calculate progress ratio
   const getTasksCompletedStats = (w: Workspace) => {
     const completed = w.tasks.filter(t => t.completed).length;
     const total = w.tasks.length;
@@ -414,6 +664,33 @@ export const CollaborationWorkspace: React.FC = () => {
               </div>
             )}
           </div>
+
+          {/* Floating Action Button (FAB) Menu - Placed INSIDE msg-list-panel context */}
+          <div className={`collaboration-fab-container ${fabOpen ? 'open' : ''}`}>
+            {fabOpen && (
+              <div className="fab-options-menu">
+                <button className="fab-menu-option" onClick={() => handleOpenCreateModal('direct')}>
+                  <span>💬</span> Direct Message
+                </button>
+                <button className="fab-menu-option" onClick={() => handleOpenCreateModal('group')}>
+                  <span>📚</span> Study Group
+                </button>
+                <button className="fab-menu-option" onClick={() => handleOpenCreateModal('project')}>
+                  <span>🚀</span> Project Team
+                </button>
+                <button className="fab-menu-option" onClick={() => handleOpenCreateModal('research')}>
+                  <span>🔬</span> Research Discussion
+                </button>
+              </div>
+            )}
+            <button 
+              className="collaboration-fab-btn" 
+              onClick={() => setFabOpen(!fabOpen)}
+              aria-label="New Collaboration Menu"
+            >
+              {fabOpen ? '✕' : '+ New'}
+            </button>
+          </div>
         </aside>
 
         {/* Center Panel: Collaboration Workspace */}
@@ -430,31 +707,32 @@ export const CollaborationWorkspace: React.FC = () => {
                 <div className="header-info">
                   <div className="header-name-row">
                     <span className="workspace-ico-header">{activeWorkspace.icon}</span>
-                    <h2 className="header-user-name">{activeWorkspace.name}</h2>
+                    <h2 className="header-user-name text-wrap-protect">{activeWorkspace.name}</h2>
                   </div>
                   <div className="header-meta">
-                    {activeWorkspace.membersCount} members • {activeWorkspace.files.length} resources • {activeWorkspace.meetings.length > 0 ? '1 meeting pending' : 'No meetings scheduled'}
+                    {activeWorkspace.membersCount} members • {activeWorkspace.files.length} resources • {
+                      activeWorkspace.meetings.length === 0 ? 'No upcoming meetings' :
+                      activeWorkspace.meetings.length === 1 ? '1 upcoming meeting' :
+                      `${activeWorkspace.meetings.length} upcoming meetings`
+                    }
                   </div>
                 </div>
               </header>
 
               {/* Workspace Navigation Tabs */}
               <nav className="workspace-tabs-nav">
-                <button className={`tab-nav-btn ${activeTab === 'discussion' ? 'active' : ''}`} onClick={() => setActiveTab('discussion')}>
-                  Discussion
-                </button>
-                <button className={`tab-nav-btn ${activeTab === 'files' ? 'active' : ''}`} onClick={() => setActiveTab('files')}>
-                  Files
-                </button>
-                <button className={`tab-nav-btn ${activeTab === 'tasks' ? 'active' : ''}`} onClick={() => setActiveTab('tasks')}>
-                  Tasks
-                </button>
-                <button className={`tab-nav-btn ${activeTab === 'meetings' ? 'active' : ''}`} onClick={() => setActiveTab('meetings')}>
-                  Meetings
-                </button>
+                {getTabsForCategory(activeWorkspace.category).map(tab => (
+                  <button 
+                    key={tab.id}
+                    className={`tab-nav-btn ${activeTab === tab.id ? 'active' : ''}`} 
+                    onClick={() => setActiveTab(tab.id as any)}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </nav>
 
-              {/* Workspace Content Tabs Panel */}
+              {/* Workspace Content Tabs Panel (SINGLE SCROLL CONTAINER) */}
               <div className="chat-messages-area workspace-tab-content">
                 
                 {/* 1. DISCUSSION TAB: Activity Timeline feed */}
@@ -467,8 +745,14 @@ export const CollaborationWorkspace: React.FC = () => {
                           <div className={`timeline-entry-card type-${log.type}`}>
                             <div className="entry-card-header">
                               <span className="entry-user">{log.user}</span>
+                              <span style={{ fontSize: '10px', fontWeight: '600', opacity: 0.8 }}>
+                                {log.type === 'announcement' ? '📌 Announcement' :
+                                 log.type === 'file' ? '📎 File shared' :
+                                 log.type === 'meeting' ? '📅 Meeting' :
+                                 log.type === 'task' ? '☑ Task completed' : '💬 Post'}
+                              </span>
                             </div>
-                            <div className="entry-card-body">
+                            <div className="entry-card-body text-wrap-protect">
                               {log.text}
                             </div>
                           </div>
@@ -476,51 +760,15 @@ export const CollaborationWorkspace: React.FC = () => {
                       ))}
                       <div ref={timelineEndRef} />
                     </div>
-
-                    {/* Add Update Box */}
-                    <div className="chat-composer workspace-update-composer">
-                      <div className="update-type-select-row">
-                        <span className="select-label">Post type:</span>
-                        <select 
-                          className="post-type-selector" 
-                          value={postType} 
-                          onChange={(e) => setPostType(e.target.value as any)}
-                        >
-                          <option value="update">💬 Comment / Post</option>
-                          <option value="announcement">📌 Announcement</option>
-                          <option value="file">📎 File Link</option>
-                          <option value="meeting">📅 Meeting Notice</option>
-                        </select>
-                      </div>
-                      <div className="composer-row">
-                        <input 
-                          type="text" 
-                          placeholder={
-                            postType === 'announcement' ? "Add announcement text..." :
-                            postType === 'file' ? "Enter filename to share (e.g. SQL_Notes.pdf)..." :
-                            postType === 'meeting' ? "Enter meeting topic or title..." :
-                            "Share an update with the workspace..."
-                          }
-                          value={updateText}
-                          onChange={(e) => setUpdateText(e.target.value)}
-                          onKeyPress={(e) => e.key === 'Enter' && handlePostUpdate()}
-                          className="composer-input update-box-input"
-                        />
-                        <Button 
-                          className="composer-send-btn post-update-btn" 
-                          onClick={handlePostUpdate}
-                        >
-                          Post
-                        </Button>
-                      </div>
-                    </div>
                   </div>
                 )}
 
                 {/* 2. FILES TAB */}
                 {activeTab === 'files' && (
                   <div className="files-tab-pane">
-                    <h3 className="tab-pane-title">Academic Resources</h3>
+                    <h3 className="tab-pane-title">
+                      {activeWorkspace.category === 'research' ? 'Research Papers & Publications' : 'Academic Resources'}
+                    </h3>
                     {activeWorkspace.files.length === 0 ? (
                       <p className="no-items-text">No resources shared yet.</p>
                     ) : (
@@ -529,10 +777,15 @@ export const CollaborationWorkspace: React.FC = () => {
                           <div key={idx} className="file-resource-card">
                             <span className="file-icon-box">📄</span>
                             <div className="file-resource-info">
-                              <div className="file-resource-name">{file.name}</div>
+                              <div className="file-resource-name text-wrap-protect">{file.name}</div>
                               <div className="file-resource-size">{file.size}</div>
                             </div>
-                            <Button className="file-download-btn outline">Download</Button>
+                            <Button 
+                              className="file-download-btn outline"
+                              onClick={() => handleDownloadFile(file.name)}
+                            >
+                              Download
+                            </Button>
                           </div>
                         ))}
                       </div>
@@ -556,7 +809,7 @@ export const CollaborationWorkspace: React.FC = () => {
                               onChange={() => handleToggleTask(task.id)}
                               className="task-checkbox-inp"
                             />
-                            <span className={`task-checkbox-text ${task.completed ? 'completed' : ''}`}>
+                            <span className={`task-checkbox-text text-wrap-protect ${task.completed ? 'completed' : ''}`}>
                               {task.text}
                             </span>
                           </label>
@@ -578,13 +831,46 @@ export const CollaborationWorkspace: React.FC = () => {
                           <div key={idx} className="meeting-schedule-card">
                             <div className="meeting-date-badge">
                               <span className="calendar-ico">📅</span>
-                              <span className="date-txt">{meet.time}</span>
+                              <span className="date-txt text-wrap-protect">{meet.time}</span>
                             </div>
                             <div className="meeting-card-details">
-                              <div className="meeting-title">{meet.title}</div>
-                              <div className="meeting-location">Location: <strong>{meet.link}</strong></div>
+                              <div className="meeting-title text-wrap-protect">{meet.title}</div>
+                              <div className="meeting-location text-wrap-protect">Location: <strong>{meet.link}</strong></div>
                             </div>
-                            <Button className="meeting-join-btn primary">Join Meeting</Button>
+                            <Button 
+                              className="meeting-join-btn primary"
+                              onClick={() => handleJoinMeeting(meet)}
+                            >
+                              Join Meeting
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* 5. RESOURCES TAB (Specific to DM) */}
+                {activeTab === 'resources' && (
+                  <div className="files-tab-pane">
+                    <h3 className="tab-pane-title">Shared Resources</h3>
+                    {!activeWorkspace.resources || activeWorkspace.resources.length === 0 ? (
+                      <p className="no-items-text">No shared resources yet.</p>
+                    ) : (
+                      <div className="files-list-grid">
+                        {activeWorkspace.resources.map((res, idx) => (
+                          <div key={idx} className="file-resource-card">
+                            <span className="file-icon-box">🔗</span>
+                            <div className="file-resource-info">
+                              <div className="file-resource-name text-wrap-protect">{res.name}</div>
+                              <div className="file-resource-size">{res.category}</div>
+                            </div>
+                            <Button 
+                              className="file-download-btn outline"
+                              onClick={() => handleDownloadResource(res.name)}
+                            >
+                              Open
+                            </Button>
                           </div>
                         ))}
                       </div>
@@ -593,11 +879,70 @@ export const CollaborationWorkspace: React.FC = () => {
                 )}
 
               </div>
+
+              {/* Discussion Composer (outside scroll content area, staying at bottom of workspace panel) */}
+              {activeTab === 'discussion' && (
+                <div className="chat-composer workspace-update-composer">
+                  <div className="update-type-select-row">
+                    <span className="select-label">Post type:</span>
+                    <select 
+                      className="post-type-selector" 
+                      value={postType} 
+                      onChange={(e) => setPostType(e.target.value as any)}
+                    >
+                      <option value="update">💬 Comment / Post</option>
+                      <option value="announcement">📌 Announcement</option>
+                      <option value="file">📎 File Link</option>
+                      <option value="meeting">📅 Meeting Notice</option>
+                    </select>
+                  </div>
+                  <div className="composer-row">
+                    <input 
+                      type="text" 
+                      placeholder={
+                        postType === 'announcement' ? "Add announcement text..." :
+                        postType === 'file' ? "Enter filename to share (e.g. SQL_Notes.pdf)..." :
+                        postType === 'meeting' ? "Enter meeting topic or title..." :
+                        "Share an update with the workspace..."
+                      }
+                      value={updateText}
+                      onChange={(e) => setUpdateText(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handlePostUpdate()}
+                      className="composer-input update-box-input"
+                    />
+                    <Button 
+                      className="composer-send-btn post-update-btn" 
+                      onClick={handlePostUpdate}
+                    >
+                      Post
+                    </Button>
+                  </div>
+                </div>
+              )}
             </>
           ) : (
             <div className="chat-empty-state">
-              <div className="empty-state-ico">💬</div>
-              <p className="empty-state-text">Select a collaboration workspace to start messaging.</p>
+              <div className="empty-state-ico" style={{ fontSize: '40px' }}>🎓</div>
+              <p className="empty-state-text" style={{ marginBottom: '24px', fontSize: '15px' }}>Select a collaboration workspace to get started.</p>
+              
+              <div className="empty-state-hints" style={{ maxWidth: '480px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', textAlign: 'left', width: '100%' }}>
+                <div className="hint-card" style={{ background: 'var(--card)', border: '1px solid var(--line)', borderRadius: '8px', padding: '12px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontWeight: '700' }}>📩 Direct Messages</span>
+                  <span style={{ color: 'var(--ink-soft)', fontSize: '11px' }}>1-on-1 academic chat & resource sharing.</span>
+                </div>
+                <div className="hint-card" style={{ background: 'var(--card)', border: '1px solid var(--line)', borderRadius: '8px', padding: '12px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontWeight: '700' }}>📚 Study Groups</span>
+                  <span style={{ color: 'var(--ink-soft)', fontSize: '11px' }}>Collaborative learning & revision sessions.</span>
+                </div>
+                <div className="hint-card" style={{ background: 'var(--card)', border: '1px solid var(--line)', borderRadius: '8px', padding: '12px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontWeight: '700' }}>🚀 Project Teams</span>
+                  <span style={{ color: 'var(--ink-soft)', fontSize: '11px' }}>Shared checklists, project files, and tasks.</span>
+                </div>
+                <div className="hint-card" style={{ background: 'var(--card)', border: '1px solid var(--line)', borderRadius: '8px', padding: '12px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontWeight: '700' }}>🔬 Research Discussions</span>
+                  <span style={{ color: 'var(--ink-soft)', fontSize: '11px' }}>Paper analysis and scientific notes tracking.</span>
+                </div>
+              </div>
             </div>
           )}
         </section>
@@ -606,71 +951,117 @@ export const CollaborationWorkspace: React.FC = () => {
         <aside className="msg-info-panel">
           {activeWorkspace ? (
             <div className="info-panel-content">
-              {/* Deadlines Section */}
+              {/* Header title */}
+              <div style={{ paddingBottom: '10px', borderBottom: '1px solid var(--line)', marginBottom: '4px' }}>
+                <h4 className="info-section-title" style={{ fontSize: '11px', color: 'var(--ink)', fontWeight: '700' }}>SHARED CONTEXT</h4>
+              </div>
+
+              {/* Deadline */}
               <div className="info-section">
-                <h4 className="info-section-title">Deadlines</h4>
+                <h5 className="info-section-title">Deadline</h5>
                 <div className="deadline-alert-card">
                   <span className="warning-ico">⚠️</span>
-                  <div className="deadline-info">
-                    <div className="deadline-title">Assignment Due</div>
-                    <div className="deadline-sub">{activeWorkspace.deadlineText || 'No pending deadlines'}</div>
+                  <div className="deadline-info text-wrap-protect">
+                    <div className="deadline-title">{activeWorkspace.deadlineText || 'No pending deadlines'}</div>
                   </div>
                 </div>
               </div>
 
-              {/* Members Section */}
+              {/* Members */}
               <div className="info-section">
-                <h4 className="info-section-title">Members</h4>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <h5 className="info-section-title" style={{ margin: 0 }}>
+                    {activeWorkspace.category === 'direct' ? 'MEMBERS' :
+                     activeWorkspace.category === 'research' ? 'PARTICIPANTS' : 'TEAM MEMBERS'}
+                  </h5>
+                  {activeWorkspace.category !== 'direct' && (
+                    <button 
+                      onClick={handleOpenAddMemberModal}
+                      style={{ 
+                        background: 'transparent', 
+                        border: 'none', 
+                        color: 'var(--pine)', 
+                        fontSize: '11px', 
+                        fontWeight: '700', 
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '2px',
+                        padding: 0
+                      }}
+                    >
+                      ➕ Add
+                    </button>
+                  )}
+                </div>
                 <ul className="info-group-list">
                   {activeWorkspace.members.map((member, idx) => (
-                    <li key={idx} className="info-group-item">
-                      <span className="member-avatar-mini">{member.substring(0, 2).toUpperCase()}</span>
-                      <span className="group-name">{member}</span>
+                    <li key={idx} className="info-group-item text-wrap-protect" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '2px', padding: '4px 0' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span 
+                          style={{ 
+                            display: 'inline-block', 
+                            width: '8px', 
+                            height: '8px', 
+                            borderRadius: '50%', 
+                            backgroundColor: member.status === 'online' ? 'var(--pine)' : 'var(--ink-faint)' 
+                          }} 
+                        />
+                        <span className="group-name" style={{ fontWeight: '600', fontSize: '13px' }}>{member.name}</span>
+                      </div>
+                      <div style={{ fontSize: '10.5px', color: 'var(--ink-soft)', paddingLeft: '16px' }}>
+                        {member.department} • Semester {member.semester}
+                      </div>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* Academic Metrics */}
+              {/* Resources */}
               <div className="info-section">
-                <h4 className="info-section-title">Shared Resources</h4>
-                <div className="academic-metrics-box">
-                  <div className="metric-row-item">
-                    <span className="metric-lbl">Resources shared</span>
-                    <span className="metric-val">{activeWorkspace.sharedResources.filesCount}</span>
-                  </div>
-                  <div className="metric-row-item">
-                    <span className="metric-lbl">Tasks completed</span>
-                    <span className="metric-val">
-                      {getTasksCompletedStats(activeWorkspace).completed}/{getTasksCompletedStats(activeWorkspace).total}
-                    </span>
-                  </div>
-                  <div className="metric-row-item">
-                    <span className="metric-lbl">Next deadline</span>
-                    <span className="metric-val">{activeWorkspace.deadlineText ? '2 days' : 'None'}</span>
-                  </div>
-                  <div className="metric-row-item">
-                    <span className="metric-lbl">Meetings this week</span>
-                    <span className="metric-val">{activeWorkspace.sharedResources.meetingsCount}</span>
-                  </div>
+                <h5 className="info-section-title">Resources</h5>
+                <div style={{ fontSize: '12.5px', fontWeight: '600', color: 'var(--ink-soft)' }}>
+                  📄 {activeWorkspace.files.length} {activeWorkspace.files.length === 1 ? 'file' : 'files'}
                 </div>
               </div>
 
-              {/* Progress Section */}
-              <div className="info-section">
-                <h4 className="info-section-title">Progress</h4>
-                <div className="progress-bar-wrap">
-                  <div className="progress-percentage-label">
-                    {getTasksCompletedStats(activeWorkspace).percent}% complete
-                  </div>
-                  <div className="progress-bar-track">
-                    <div 
-                      className="progress-bar-fill" 
-                      style={{ width: `${getTasksCompletedStats(activeWorkspace).percent}%` }}
-                    />
+              {/* Tasks */}
+              {activeWorkspace.category !== 'direct' && (
+                <div className="info-section">
+                  <h5 className="info-section-title">Tasks</h5>
+                  <div style={{ fontSize: '12.5px', fontWeight: '600', color: 'var(--ink-soft)' }}>
+                    ☑️ {getTasksCompletedStats(activeWorkspace).completed} / {getTasksCompletedStats(activeWorkspace).total} completed
                   </div>
                 </div>
-              </div>
+              )}
+
+              {/* Meetings */}
+              {activeWorkspace.category !== 'direct' && (
+                <div className="info-section">
+                  <h5 className="info-section-title">Meetings</h5>
+                  <div style={{ fontSize: '12.5px', fontWeight: '600', color: 'var(--ink-soft)' }}>
+                    📅 {activeWorkspace.meetings.length} {activeWorkspace.meetings.length === 1 ? 'meeting' : 'meetings'} this week
+                  </div>
+                </div>
+              )}
+
+              {/* Workspace Progress */}
+              {activeWorkspace.category !== 'direct' && (
+                <div className="info-section">
+                  <h5 className="info-section-title">Workspace Progress</h5>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', letterSpacing: '0.02em', color: 'var(--ink)', fontWeight: '700' }}>
+                    {getBlockProgressBar(getTasksCompletedStats(activeWorkspace).percent)} {getTasksCompletedStats(activeWorkspace).percent}%
+                  </div>
+                  <div className="progress-bar-wrap" style={{ marginTop: '8px' }}>
+                    <div className="progress-bar-track">
+                      <div 
+                        className="progress-bar-fill" 
+                        style={{ width: `${getTasksCompletedStats(activeWorkspace).percent}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="info-empty-state">
@@ -679,34 +1070,302 @@ export const CollaborationWorkspace: React.FC = () => {
           )}
         </aside>
 
-        {/* Floating Action Button (FAB) Menu */}
-        <div className={`collaboration-fab-container ${fabOpen ? 'open' : ''}`}>
-          {fabOpen && (
-            <div className="fab-options-menu">
-              <button className="fab-menu-option" onClick={() => handleCreateMockCollab('Direct Message', 'direct')}>
-                <span>💬</span> Direct Message
-              </button>
-              <button className="fab-menu-option" onClick={() => handleCreateMockCollab('Study Group', 'group')}>
-                <span>📚</span> Study Group
-              </button>
-              <button className="fab-menu-option" onClick={() => handleCreateMockCollab('Project Team', 'project')}>
-                <span>🚀</span> Project Team
-              </button>
-              <button className="fab-menu-option" onClick={() => handleCreateMockCollab('Research Discussion', 'research')}>
-                <span>🔬</span> Research Discussion
-              </button>
-            </div>
-          )}
-          <button 
-            className="collaboration-fab-btn" 
-            onClick={() => setFabOpen(!fabOpen)}
-            aria-label="New Collaboration Menu"
-          >
-            {fabOpen ? '✕' : '+ New'}
-          </button>
-        </div>
-
       </div>
+
+      {/* 1. START A DIRECT MESSAGE MODAL */}
+      {modalType === 'direct' && (
+        <div className="collab-modal-overlay">
+          <div className="collab-modal">
+            <h3 className="collab-modal-title">Start a Direct Message</h3>
+            
+            <div className="collab-modal-field">
+              <label className="collab-modal-label" htmlFor="dm-search">Search connections</label>
+              <input 
+                id="dm-search"
+                type="text" 
+                className="collab-modal-input" 
+                placeholder="Search students..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <div className="collab-modal-field">
+              <label className="collab-modal-label">Select Connection</label>
+              <div className="collab-modal-student-list">
+                {AVAILABLE_STUDENTS.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map(student => (
+                    <div 
+                      key={student.id} 
+                      className="student-select-row"
+                      onClick={() => setSelectedStudentId(student.id)}
+                    >
+                      <input 
+                        type="radio" 
+                        name="dm-student" 
+                        checked={selectedStudentId === student.id}
+                        onChange={() => setSelectedStudentId(student.id)}
+                        style={{ accentColor: 'var(--pine)', cursor: 'pointer' }}
+                      />
+                      <div className="student-avatar-mini">
+                        {student.initials}
+                      </div>
+                      <div className="student-details text-wrap-protect">
+                        <span className="student-select-name">{student.name}</span>
+                        <span className="student-select-sub">{student.department} • Semester {student.semester}</span>
+                      </div>
+                      <span style={{ 
+                        width: '6px', 
+                        height: '6px', 
+                        borderRadius: '50%', 
+                        backgroundColor: student.status === 'online' ? 'var(--pine)' : 'var(--ink-faint)',
+                        flexShrink: 0
+                      }} />
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <div className="collab-modal-actions">
+              <Button className="outline" onClick={handleCloseModal}>Cancel</Button>
+              <Button 
+                className="primary" 
+                onClick={handleCreateDM} 
+                disabled={!selectedStudentId}
+              >
+                Start Conversation
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2, 3, 4. STUDY GROUP / PROJECT TEAM / RESEARCH DISCUSSION MODAL */}
+      {(modalType === 'group' || modalType === 'project' || modalType === 'research') && (
+        <div className="collab-modal-overlay">
+          <div className="collab-modal">
+            <h3 className="collab-modal-title">
+              {modalType === 'group' ? 'Create Study Group' :
+               modalType === 'project' ? 'Create Project Team' : 'Create Research Discussion'}
+            </h3>
+            
+            <div className="collab-modal-field">
+              <label className="collab-modal-label" htmlFor="collab-name">
+                {modalType === 'group' ? 'Group Name' :
+                 modalType === 'project' ? 'Project Name' : 'Research Topic'}
+              </label>
+              <input 
+                id="collab-name"
+                type="text" 
+                className="collab-modal-input" 
+                placeholder={modalType === 'group' ? "e.g. DBMS Study Circle" : modalType === 'project' ? "e.g. Campus Navigator App" : "e.g. AI in Education"}
+                value={newCollabName}
+                onChange={(e) => setNewCollabName(e.target.value)}
+              />
+            </div>
+
+            <div className="collab-modal-field">
+              <label className="collab-modal-label" htmlFor="collab-desc">Description</label>
+              <textarea 
+                id="collab-desc"
+                className="collab-modal-textarea"
+                placeholder="Enter description (optional)..."
+                value={newCollabDesc}
+                onChange={(e) => setNewCollabDesc(e.target.value)}
+              />
+            </div>
+
+            <div className="collab-modal-field">
+              <label className="collab-modal-label" htmlFor="member-search">Add Members</label>
+              <input 
+                id="member-search"
+                type="text" 
+                className="collab-modal-input" 
+                placeholder="Search students..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <div className="collab-modal-field">
+              <label className="collab-modal-label">Connections Checklist</label>
+              <div className="collab-modal-student-list">
+                {AVAILABLE_STUDENTS.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map(student => (
+                    <label 
+                      key={student.id} 
+                      className="student-select-row"
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <input 
+                        type="checkbox" 
+                        checked={selectedStudentIds.includes(student.id)}
+                        onChange={() => {
+                          if (selectedStudentIds.includes(student.id)) {
+                            setSelectedStudentIds(prev => prev.filter(id => id !== student.id));
+                          } else {
+                            setSelectedStudentIds(prev => [...prev, student.id]);
+                          }
+                        }}
+                        style={{ accentColor: 'var(--pine)', cursor: 'pointer' }}
+                      />
+                      <div className="student-avatar-mini">
+                        {student.initials}
+                      </div>
+                      <div className="student-details text-wrap-protect">
+                        <span className="student-select-name">{student.name}</span>
+                        <span className="student-select-sub">{student.department} • Semester {student.semester}</span>
+                      </div>
+                      <span style={{ 
+                        width: '6px', 
+                        height: '6px', 
+                        borderRadius: '50%', 
+                        backgroundColor: student.status === 'online' ? 'var(--pine)' : 'var(--ink-faint)',
+                        flexShrink: 0
+                      }} />
+                    </label>
+                  ))}
+              </div>
+            </div>
+
+            <div style={{ fontSize: '12px', color: 'var(--ink-soft)', fontWeight: '600' }}>
+              {modalType === 'group' ? `Selected Members: ${selectedStudentIds.length}` :
+               modalType === 'project' ? `Selected: ${selectedStudentIds.length} members` : `Selected: ${selectedStudentIds.length} participants`}
+            </div>
+
+            <div className="collab-modal-actions">
+              <Button className="outline" onClick={handleCloseModal}>Cancel</Button>
+              <Button 
+                className="primary" 
+                onClick={handleCreateGroupProjectResearch} 
+                disabled={!newCollabName.trim()}
+              >
+                {modalType === 'group' ? 'Create Group' :
+                 modalType === 'project' ? 'Create Team' : 'Create Discussion'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 5. ADD MEMBERS AFTER CREATION MODAL */}
+      {modalType === 'add_member' && activeWorkspace && (
+        <div className="collab-modal-overlay">
+          <div className="collab-modal">
+            <h3 className="collab-modal-title">
+              {activeWorkspace.category === 'research' ? 'Add Participants' : 'Add Members'}
+            </h3>
+            
+            <div className="collab-modal-field">
+              <label className="collab-modal-label" htmlFor="add-member-search">Search students</label>
+              <input 
+                id="add-member-search"
+                type="text" 
+                className="collab-modal-input" 
+                placeholder="Search students..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <div className="collab-modal-field">
+              <label className="collab-modal-label">Connections</label>
+              <div className="collab-modal-student-list">
+                {AVAILABLE_STUDENTS.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map(student => {
+                    const isAlreadyMember = activeWorkspace.members.some(m => m.id === student.id);
+                    return (
+                      <label 
+                        key={student.id} 
+                        className="student-select-row"
+                        style={{ 
+                          cursor: isAlreadyMember ? 'not-allowed' : 'pointer',
+                          opacity: isAlreadyMember ? 0.6 : 1
+                        }}
+                      >
+                        <input 
+                          type="checkbox" 
+                          checked={isAlreadyMember || selectedAddStudentIds.includes(student.id)}
+                          disabled={isAlreadyMember}
+                          onChange={() => {
+                            if (isAlreadyMember) return;
+                            if (selectedAddStudentIds.includes(student.id)) {
+                              setSelectedAddStudentIds(prev => prev.filter(id => id !== student.id));
+                            } else {
+                              setSelectedAddStudentIds(prev => [...prev, student.id]);
+                            }
+                          }}
+                          style={{ accentColor: 'var(--pine)', cursor: isAlreadyMember ? 'not-allowed' : 'pointer' }}
+                        />
+                        <div className="student-avatar-mini">
+                          {student.initials}
+                        </div>
+                        <div className="student-details text-wrap-protect">
+                          <span className="student-select-name">{student.name}</span>
+                          <span className="student-select-sub">
+                            {student.department} • Semester {student.semester}
+                            {isAlreadyMember && ' (Already Member)'}
+                          </span>
+                        </div>
+                        <span style={{ 
+                          width: '6px', 
+                          height: '6px', 
+                          borderRadius: '50%', 
+                          backgroundColor: student.status === 'online' ? 'var(--pine)' : 'var(--ink-faint)',
+                          flexShrink: 0
+                        }} />
+                      </label>
+                    );
+                  })}
+              </div>
+            </div>
+
+            <div style={{ fontSize: '12px', color: 'var(--ink-soft)', fontWeight: '600' }}>
+              Selected: {selectedAddStudentIds.length} new
+            </div>
+
+            <div className="collab-modal-actions">
+              <Button className="outline" onClick={handleCloseModal}>Cancel</Button>
+              <Button 
+                className="primary" 
+                onClick={handleAddMembers} 
+                disabled={selectedAddStudentIds.length === 0}
+              >
+                Add Selected
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MOCK MEETING DETAILS MODAL */}
+      {activeMeetingModal && (
+        <div className="collab-modal-overlay">
+          <div className="collab-modal" style={{ maxWidth: '400px' }}>
+            <h3 className="collab-modal-title">Academic Meeting</h3>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px' }}>
+              <div><strong>Topic:</strong> <span className="text-wrap-protect">{activeMeetingModal.title}</span></div>
+              <div><strong>Time:</strong> <span className="text-wrap-protect">{activeMeetingModal.time}</span></div>
+              <div><strong>Location / Platform:</strong> <span className="text-wrap-protect">{activeMeetingModal.link}</span></div>
+            </div>
+
+            <div className="collab-modal-actions" style={{ marginTop: '12px' }}>
+              <Button className="outline" onClick={() => setActiveMeetingModal(null)}>Cancel</Button>
+              <Button className="primary" onClick={executeJoinMeeting}>Join</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DYNAMIC TOAST ALERTS */}
+      {toastMessage && (
+        <div className="collab-toast">
+          <span>🔔</span>
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
     </AppLayout>
   );
 };
@@ -735,11 +1394,11 @@ const WorkspaceCard: React.FC<CardProps> = ({ item, activeId, onSelect }) => {
       </div>
       <div className="card-info">
         <div className="card-top-row">
-          <span className="card-user-name">{item.name}</span>
+          <span className="card-user-name text-wrap-protect">{item.name}</span>
           <span className="card-time">{item.lastActivityTime}</span>
         </div>
         <div className="card-bottom-row">
-          <span className="card-msg-preview">{item.lastActivityText}</span>
+          <span className="card-msg-preview text-wrap-protect">{item.lastActivityText}</span>
           {item.unreadCount > 0 && (
             <span className="card-unread-badge">{item.unreadCount}</span>
           )}
