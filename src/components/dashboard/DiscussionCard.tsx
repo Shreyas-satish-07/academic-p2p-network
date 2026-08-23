@@ -1,12 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
 import { TRENDING_DISCUSSIONS } from '../../data/discussions';
 
 export const DiscussionCard: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="card">
+    <div className="card cursor-pointer" onClick={() => navigate(ROUTES.DISCUSSIONS)}>
       <div className="card-head">
         <span className="card-tab tab-marigold">DC</span>
         <span className="card-title">Trending discussions</span>
+        <span className="card-link" style={{ marginLeft: 'auto' }}>View all →</span>
       </div>
       
       {TRENDING_DISCUSSIONS.map((disc) => (

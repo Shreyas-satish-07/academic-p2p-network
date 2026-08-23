@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DISCOVER_STUDY_GROUPS } from '../../data/studyGroupsData';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 
 export const DiscoverStudyGroups: React.FC = () => {
+  const navigate = useNavigate();
   const [joinedGroupIds, setJoinedGroupIds] = useState<string[]>([]);
 
   const toggleJoin = (groupId: string) => {
@@ -83,16 +85,29 @@ export const DiscoverStudyGroups: React.FC = () => {
                 </div>
                 <div className="dg-bottom">
                   <span className="dg-members">{membersText}</span>
-                  <Button 
-                    className="dg-join"
-                    onClick={() => toggleJoin(group.id)}
-                    style={{
-                      backgroundColor: isJoined ? 'var(--line)' : 'var(--pine-tint)',
-                      color: isJoined ? 'var(--ink-soft)' : 'var(--pine-dark)',
-                    }}
-                  >
-                    {isJoined ? 'Joined' : 'Join'}
-                  </Button>
+                  {isJoined && group.workspaceId ? (
+                    <Button 
+                      className="dg-join"
+                      onClick={() => navigate(`/messages?workspaceId=${group.workspaceId}`)}
+                      style={{
+                        backgroundColor: 'var(--pine)',
+                        color: '#F6F4EC',
+                      }}
+                    >
+                      Go to Workspace
+                    </Button>
+                  ) : (
+                    <Button 
+                      className="dg-join"
+                      onClick={() => toggleJoin(group.id)}
+                      style={{
+                        backgroundColor: isJoined ? 'var(--line)' : 'var(--pine-tint)',
+                        color: isJoined ? 'var(--ink-soft)' : 'var(--pine-dark)',
+                      }}
+                    >
+                      {isJoined ? 'Joined' : 'Join'}
+                    </Button>
+                  )}
                 </div>
               </div>
             );

@@ -1,18 +1,34 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ACTIVE_COLLABORATIONS } from '../../data/students';
 
 export const ActiveCollaborations: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleCollabClick = (workspaceId?: string) => {
+    if (workspaceId) {
+      navigate(`/messages?workspaceId=${workspaceId}`);
+    } else {
+      navigate('/projects');
+    }
+  };
+
   return (
     <div className="card span-2">
       <div className="card-head">
         <span className="card-tab tab-pine">PR</span>
         <span className="card-title">Active collaborations</span>
-        <span className="card-link">Open board →</span>
+        <span className="card-link" onClick={() => navigate('/projects')}>Open board →</span>
       </div>
       
       {ACTIVE_COLLABORATIONS.map((collab) => (
-        <div key={collab.id} className="collab-item">
+        <div 
+          key={collab.id} 
+          className="collab-item cursor-pointer"
+          onClick={() => handleCollabClick(collab.workspaceId)}
+          style={{ transition: 'background 0.12s ease', padding: '10px 8px', borderRadius: '8px' }}
+        >
           <div className="collab-head">
             <span className="t">{collab.title}</span>
             <span className="pct">{collab.progressText}</span>

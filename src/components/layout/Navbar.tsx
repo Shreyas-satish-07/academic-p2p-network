@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NotificationDropdown from '../dashboard/NotificationDropdown';
+import { ROUTES } from '../../constants/routes';
 
 interface NavbarProps {
   onMenuClick: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
@@ -58,27 +61,39 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
         
         <div className={`search-panel ${isSearchOpen ? 'open' : ''}`} id="searchPanel">
           <div className="search-cats">
-            <span className="search-cat">Students</span>
-            <span className="search-cat">Study Groups</span>
-            <span className="search-cat">Resources</span>
-            <span className="search-cat">Projects</span>
-            <span className="search-cat">Discussions</span>
+            <span className="search-cat cursor-pointer" onClick={() => { navigate(ROUTES.PEER_MATCH); setIsSearchOpen(false); }}>Students</span>
+            <span className="search-cat cursor-pointer" onClick={() => { navigate(ROUTES.STUDY_GROUPS); setIsSearchOpen(false); }}>Study Groups</span>
+            <span className="search-cat cursor-pointer" onClick={() => { navigate(ROUTES.RESOURCES); setIsSearchOpen(false); }}>Resources</span>
+            <span className="search-cat cursor-pointer" onClick={() => { navigate(ROUTES.PROJECTS); setIsSearchOpen(false); }}>Projects</span>
+            <span className="search-cat cursor-pointer" onClick={() => { navigate(ROUTES.DISCUSSIONS); setIsSearchOpen(false); }}>Discussions</span>
           </div>
           <div className="search-sub">Recent searches</div>
-          <div className="search-item">
+          <div 
+            className="search-item cursor-pointer"
+            onClick={() => { navigate(ROUTES.RESOURCES, { state: { searchQuery: 'DBMS' } }); setIsSearchOpen(false); }}
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
             DBMS unit 4 notes
           </div>
-          <div className="search-item">
+          <div 
+            className="search-item cursor-pointer"
+            onClick={() => { navigate(ROUTES.PEER_MATCH, { state: { searchQuery: 'Rahul Sharma' } }); setIsSearchOpen(false); }}
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
             Rahul Sharma
           </div>
           <div className="search-sub">Suggested for you</div>
-          <div className="search-item">
+          <div 
+            className="search-item cursor-pointer"
+            onClick={() => { navigate(ROUTES.PEER_MATCH, { state: { searchQuery: 'React' } }); setIsSearchOpen(false); }}
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
             React study partners
           </div>
-          <div className="search-item">
+          <div 
+            className="search-item cursor-pointer"
+            onClick={() => { navigate(ROUTES.RESOURCES, { state: { searchQuery: 'Machine Learning' } }); setIsSearchOpen(false); }}
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
             Machine Learning resources
           </div>

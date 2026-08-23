@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AppLayout from '../components/layout/AppLayout';
 import Button from '../components/ui/button';
@@ -10,6 +10,7 @@ import '../styles/projects.css';
 
 export const Projects: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'open' | 'joined'>('all');
@@ -18,6 +19,24 @@ export const Projects: React.FC = () => {
   // Project Detail state
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [detailTab, setDetailTab] = useState<'overview' | 'tasks' | 'resources' | 'members' | 'timeline'>('overview');
+
+  useEffect(() => {
+    if (location.state) {
+      const stateObj = location.state as any;
+      if (stateObj.openCreateModal) {
+        handleOpenCreateModal();
+      }
+      if (stateObj.projectId) {
+        const proj = projects.find(p => p.id === stateObj.projectId);
+        if (proj) {
+          setSelectedProject(proj);
+          setDetailTab('overview');
+        }
+      }
+      // Clear location state to prevent repeating actions on page reloads/renders
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, projects]);
 
   // Confirmation dialog state
   const [confirmJoinProject, setConfirmJoinProject] = useState<Project | null>(null);
@@ -61,7 +80,10 @@ export const Projects: React.FC = () => {
 
   const handleCreateProjectSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle.trim()) return;
+    if (!newTitle.trim()) {
+      showToast('Project title is required.');
+      return;
+    }
 
     const newProjId = `p-${Date.now()}`;
     const skillsList = newSkills.split(',').map(s => s.trim()).filter(Boolean);

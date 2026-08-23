@@ -1,15 +1,34 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import Button from '../ui/button';
+import { ROUTES } from '../../constants/routes';
 import type { Project } from '../../types/project';
-
 
 interface ProjectPortfolioProps {
   projects: Project[];
+  onShowToast: (msg: string) => void;
 }
 
-export const ProjectPortfolio: React.FC<ProjectPortfolioProps> = ({ projects }) => {
+export const ProjectPortfolio: React.FC<ProjectPortfolioProps> = ({ projects, onShowToast }) => {
+  const navigate = useNavigate();
+
+  const handleViewProject = (projectId: string) => {
+    navigate(ROUTES.PROJECTS, {
+      state: { projectId }
+    });
+  };
+
+  const handleRepositoryClick = (e: React.MouseEvent, repositoryUrl: string, title: string) => {
+    e.preventDefault();
+    if (!repositoryUrl || repositoryUrl === '#') {
+      onShowToast(`Repository for "${title}" is not configured in this demo.`);
+    } else {
+      window.open(repositoryUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -66,8 +85,18 @@ export const ProjectPortfolio: React.FC<ProjectPortfolioProps> = ({ projects }) 
                 </div>
 
                 <div className="project-actions">
-                  <Button className="proj-btn proj-btn-outline">Repository</Button>
-                  <Button className="proj-btn proj-btn-solid">View Project</Button>
+                  <Button 
+                    className="proj-btn proj-btn-outline"
+                    onClick={(e) => handleRepositoryClick(e, project.repositoryUrl || '#', project.title)}
+                  >
+                    Repository
+                  </Button>
+                  <Button 
+                    className="proj-btn proj-btn-solid"
+                    onClick={() => handleViewProject(project.id)}
+                  >
+                    View Project
+                  </Button>
                 </div>
               </motion.div>
             );

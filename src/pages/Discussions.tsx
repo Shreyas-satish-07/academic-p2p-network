@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AppLayout from '../components/layout/AppLayout';
 import Button from '../components/ui/button';
@@ -13,6 +13,7 @@ import '../styles/discussions.css';
 
 export const Discussions: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   
   // State
   const [discussions, setDiscussions] = useState<Discussion[]>(INITIAL_DISCUSSIONS);
@@ -20,6 +21,17 @@ export const Discussions: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'Question' | 'Research' | 'Project' | 'Study Group'>('all');
   const [selectedDept, setSelectedDept] = useState('All');
   const [sortOrder, setSortOrder] = useState<'latest' | 'discussed' | 'viewed'>('latest');
+
+  useEffect(() => {
+    if (location.state) {
+      const stateObj = location.state as any;
+      if (stateObj.openCreateDiscussionModal || stateObj.openCreateDiscussion) {
+        handleOpenCreateModal();
+      }
+      // Clear location state to prevent repeating actions on page reloads/renders
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   // In-page Detail view state
   const [selectedDiscussion, setSelectedDiscussion] = useState<Discussion | null>(null);
@@ -151,7 +163,14 @@ export const Discussions: React.FC = () => {
 
   const handleStartDiscussionSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle.trim() || !newDesc.trim()) return;
+    if (!newTitle.trim()) {
+      showToast("Discussion title is required.");
+      return;
+    }
+    if (!newDesc.trim()) {
+      showToast("Discussion description is required.");
+      return;
+    }
 
     const tagsList = newTags.split(',').map(t => t.trim()).filter(Boolean);
 

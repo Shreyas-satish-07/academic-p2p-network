@@ -1,13 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { ROUTES } from '../../constants/routes';
 import type { Resource } from '../../types/resource';
-
 
 interface ResourceContributionsProps {
   resources: Resource[];
 }
 
 export const ResourceContributions: React.FC<ResourceContributionsProps> = ({ resources }) => {
+  const navigate = useNavigate();
+
+  const handleResourceClick = (resourceId: string) => {
+    navigate(ROUTES.RESOURCES, {
+      state: { resourceId }
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -16,7 +25,11 @@ export const ResourceContributions: React.FC<ResourceContributionsProps> = ({ re
       </CardHeader>
       <CardContent>
         {resources.map((res) => (
-          <div key={res.id} className="res-item">
+          <div 
+            key={res.id} 
+            className="res-item cursor-pointer hover:bg-[rgba(0,0,0,0.02)] rounded-[8px] transition-colors duration-150 p-1.5"
+            onClick={() => handleResourceClick(res.id)}
+          >
             <div 
               className="res-icon" 
               style={{

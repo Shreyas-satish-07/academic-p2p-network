@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AppLayout from '../components/layout/AppLayout';
 import PeerMatchHero from '../components/peer-match/PeerMatchHero';
@@ -14,6 +15,44 @@ import NetworkActivity from '../components/peer-match/NetworkActivity';
 import '../styles/peer-match.css';
 
 export const PeerMatch: React.FC = () => {
+  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    if (location.state) {
+      const stateObj = location.state as any;
+      if (stateObj.searchQuery) {
+        setSearchQuery(stateObj.searchQuery);
+      }
+      if (stateObj.focusSearch) {
+        setTimeout(() => {
+          const el = document.getElementById('pm-search-in');
+          if (el) el.focus();
+        }, 150);
+      }
+      // Clear state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+  const [selectedDept, setSelectedDept] = useState('All');
+  const [selectedSemester, setSelectedSemester] = useState('All');
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
+  const [selectedResearch, setSelectedResearch] = useState<string[]>([]);
+  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
+  const [matchPct, setMatchPct] = useState<number>(50);
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setSelectedDept('All');
+    setSelectedSemester('All');
+    setSelectedSkills([]);
+    setSelectedProjects([]);
+    setSelectedResearch([]);
+    setSelectedAvailability([]);
+    setMatchPct(50);
+  };
+
   return (
     <AppLayout>
       <motion.div
@@ -28,10 +67,38 @@ export const PeerMatch: React.FC = () => {
 
         <div className="pm-browse">
           <div className="pm-filters">
-            <FilterPanel />
+            <FilterPanel 
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedDept={selectedDept}
+              setSelectedDept={setSelectedDept}
+              selectedSemester={selectedSemester}
+              setSelectedSemester={setSelectedSemester}
+              selectedSkills={selectedSkills}
+              setSelectedSkills={setSelectedSkills}
+              selectedProjects={selectedProjects}
+              setSelectedProjects={setSelectedProjects}
+              selectedResearch={selectedResearch}
+              setSelectedResearch={setSelectedResearch}
+              selectedAvailability={selectedAvailability}
+              setSelectedAvailability={setSelectedAvailability}
+              matchPct={matchPct}
+              setMatchPct={setMatchPct}
+              onReset={handleResetFilters}
+            />
             <MatchCompatibility />
           </div>
-          <MatchedStudents />
+          <MatchedStudents 
+            searchQuery={searchQuery}
+            selectedDept={selectedDept}
+            selectedSemester={selectedSemester}
+            selectedSkills={selectedSkills}
+            selectedProjects={selectedProjects}
+            selectedResearch={selectedResearch}
+            selectedAvailability={selectedAvailability}
+            matchPct={matchPct}
+            onReset={handleResetFilters}
+          />
         </div>
 
         <StudyGroupSuggestions />

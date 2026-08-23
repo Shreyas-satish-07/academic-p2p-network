@@ -25,6 +25,7 @@ export const FEATURED_STUDY_GROUP: FeaturedGroupWithMatch = {
   activityStatus: 'Live now · 12 studying',
   meetingSchedule: 'Tue & Thu, 7 PM',
   matchPercentage: 92,
+  workspaceId: 'dbms-circle', // Fallback workspace mapping
 };
 
 export const DISCOVER_STUDY_GROUPS: StudyGroup[] = [
@@ -37,6 +38,7 @@ export const DISCOVER_STUDY_GROUPS: StudyGroup[] = [
     difficulty: 'Intermediate',
     activityStatusText: 'Active today',
     acronym: 'OS',
+    workspaceId: 'os-circle',
   },
   {
     id: 'sg-pp',
@@ -77,6 +79,7 @@ export const DISCOVER_STUDY_GROUPS: StudyGroup[] = [
     difficulty: 'Beginner',
     activityStatusText: 'Active today',
     acronym: 'DB',
+    workspaceId: 'dbms-circle',
   },
   {
     id: 'sg-rp',

@@ -77,6 +77,7 @@ export interface CollaborationItem {
     bgClass: string;
     textClass: string;
   }[];
+  workspaceId?: string;
 }
 
 export interface ActivityFeedItem {

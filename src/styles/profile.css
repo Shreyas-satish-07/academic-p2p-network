@@ -17,7 +17,7 @@
   border:6px solid var(--card); margin-top:-70px; /* Adjusted to fit 140px height */
   box-shadow:var(--shadow);
 }
-.hero-top-row{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:8px; } /* Improved gap and vertical spacing */
+.hero-top-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:8px; } /* Improved gap and vertical spacing */
 .hero-name{ font-family:'Fraunces',serif; font-weight:600; font-size:30px; margin-top:20px; }
 .hero-headline{ font-size:14px; color:var(--ink-soft); margin-top:4px; }
 .hero-meta{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:12px; } /* Improved spacing */
@@ -35,9 +35,38 @@
 .hero-stat .n{ font-family:'IBM Plex Mono',monospace; font-size:19px; font-weight:600; }
 .hero-stat .l{ font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
 
-/* ===== Page flow layout ===== */
-.profile-grid{ display:block; }
-.col-stack{ display:flex; flex-direction:column; gap:18px; max-width:880px; margin:0 auto; }
+.col-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  min-width: 0;
+}
+
+/* Accessibility focus states */
+.social-btn:focus-visible,
+.hero-btn:focus-visible,
+.connect-btn:focus-visible {
+  outline: 2px solid var(--pine);
+  outline-offset: 2px;
+}
+
+/* Sent connection request state */
+.connect-btn.sent {
+  background: var(--slate-tint) !important;
+  color: var(--slate) !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Hover style for clickable timeline items */
+.activity-item.cursor-pointer:hover .activity-body .t {
+  color: var(--pine);
+  text-decoration: underline;
+}
 
 /* ===== About / academic info ===== */
 .about-row{ margin-bottom:14px; }

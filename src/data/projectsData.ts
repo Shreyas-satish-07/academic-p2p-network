@@ -10,9 +10,9 @@ export const CURRENT_USER_MEMBER: ProjectMember = {
 };
 
 export const CONNECTIONS: ProjectMember[] = [
-  { id: 'c1', name: 'Ananya Rao', initials: 'AR', department: 'CSE', semester: 'Semester 1' },
-  { id: 'c2', name: 'Rahul Sharma', initials: 'RS', department: 'AIML', semester: 'Semester 1' },
-  { id: 'c3', name: 'Priya Nair', initials: 'PN', department: 'CSE', semester: 'Semester 2' },
+  { id: 'c1', name: 'Ananya Rao', initials: 'AR', department: 'CSE', semester: 'Semester 5' },
+  { id: 'c2', name: 'Rahul Sharma', initials: 'RS', department: 'AIML', semester: 'Semester 3' },
+  { id: 'c3', name: 'Priya Nair', initials: 'PN', department: 'CSE', semester: 'Semester 5' },
   { id: 'c4', name: 'Rhea Kulkarni', initials: 'RK', department: 'CSE', semester: 'Semester 2' },
   { id: 'c5', name: 'Sanjay M.', initials: 'SM', department: 'CSE', semester: 'Semester 1' }
 ];
@@ -38,7 +38,7 @@ export const INITIAL_PROJECTS: Project[] = [
     avatarColor: 'var(--pine-dark)',
     members: [
       CURRENT_USER_MEMBER,
-      { id: 'c1', name: 'Ananya Rao', initials: 'AR', department: 'CSE', semester: 'Semester 1' },
+      { id: 'c1', name: 'Ananya Rao', initials: 'AR', department: 'CSE', semester: 'Semester 5' },
       { id: 'c4', name: 'Rhea Kulkarni', initials: 'RK', department: 'CSE', semester: 'Semester 2' }
     ],
     workspaceId: 'project-1',

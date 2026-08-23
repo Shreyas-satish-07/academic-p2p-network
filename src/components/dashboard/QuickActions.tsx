@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ROUTES } from '../../constants/routes';
 
 export const QuickActions: React.FC = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -29,23 +32,38 @@ export const QuickActions: React.FC = () => {
             className="quick-menu quick-menu-cards open"
             style={{ overflow: 'hidden', transformOrigin: 'bottom right' }}
           >
-            <button className="quick-btn quick-card">
+            <button 
+              className="quick-btn quick-card"
+              onClick={() => navigate(ROUTES.RESOURCES, { state: { openShareModal: true } })}
+            >
               <span className="quick-emoji">📚</span>
               Upload Notes
             </button>
-            <button className="quick-btn quick-card">
+            <button 
+              className="quick-btn quick-card"
+              onClick={() => navigate(ROUTES.MESSAGES, { state: { openCreateWorkspace: true, workspaceType: 'study-group' } })}
+            >
               <span className="quick-emoji">👥</span>
               Create Group
             </button>
-            <button className="quick-btn quick-card">
+            <button 
+              className="quick-btn quick-card"
+              onClick={() => navigate(ROUTES.PROJECTS, { state: { openCreateModal: true } })}
+            >
               <span className="quick-emoji">🚀</span>
               Start Project
             </button>
-            <button className="quick-btn quick-card">
+            <button 
+              className="quick-btn quick-card"
+              onClick={() => navigate(ROUTES.DISCUSSIONS, { state: { openCreateDiscussion: true } })}
+            >
               <span className="quick-emoji">❓</span>
               Ask a Question
             </button>
-            <button className="quick-btn quick-card">
+            <button 
+              className="quick-btn quick-card"
+              onClick={() => navigate(ROUTES.PEER_MATCH, { state: { focusSearch: true } })}
+            >
               <span className="quick-emoji">🤝</span>
               Find Study Partner
             </button>

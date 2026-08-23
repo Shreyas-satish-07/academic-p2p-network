@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import Button from '../components/ui/button';
 import '../styles/messages.css';
@@ -267,6 +268,7 @@ const getBlockProgressBar = (percent: number) => {
 };
 
 export const CollaborationWorkspace: React.FC = () => {
+  const location = useLocation();
   const [workspaces, setWorkspaces] = useState<Workspace[]>(INITIAL_WORKSPACES);
   const [activeWorkspaceId, setActiveWorkspaceId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'discussion' | 'files' | 'tasks' | 'meetings' | 'resources'>('discussion');
@@ -276,6 +278,15 @@ export const CollaborationWorkspace: React.FC = () => {
 
   // Modal State Manager
   const [modalType, setModalType] = useState<'direct' | 'group' | 'project' | 'research' | 'add_member' | null>(null);
+
+  useEffect(() => {
+    if (location.state) {
+      const stateObj = location.state as any;
+      if (stateObj.openCreateGroupModal || (stateObj.openCreateWorkspace && stateObj.workspaceType === 'study-group')) {
+        setModalType('group');
+      }
+    }
+  }, [location.state]);
 
   // Modal Form states
   const [newCollabName, setNewCollabName] = useState('');
@@ -301,6 +312,33 @@ export const CollaborationWorkspace: React.FC = () => {
       setToastMessage(null);
     }, 3000);
   };
+
+  useEffect(() => {
+    // 1. Check state passed via navigate()
+    if (location.state && (location.state as any).activeWorkspaceId) {
+      const stateId = (location.state as any).activeWorkspaceId;
+      if (workspaces.some(w => w.id === stateId)) {
+        setActiveWorkspaceId(stateId);
+        window.history.replaceState({}, document.title);
+        return;
+      }
+    }
+    
+    // 2. Check search parameters
+    const params = new URLSearchParams(location.search);
+    const queryId = params.get('workspaceId') || params.get('id') || params.get('workspace');
+    if (queryId) {
+      if (workspaces.some(w => w.id === queryId)) {
+        setActiveWorkspaceId(queryId);
+        return;
+      }
+    }
+    
+    // 3. Fallback to first if null
+    if (!activeWorkspaceId && workspaces.length > 0) {
+      setActiveWorkspaceId(workspaces[0].id);
+    }
+  }, [location.search, location.state, workspaces]);
 
   // Keep tabs correct and clear unread counts on active Workspace change
   useEffect(() => {

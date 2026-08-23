@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import Button from '../ui/button';
+import { ROUTES } from '../../constants/routes';
 import type { Peer } from '../../types/peer';
-
 
 interface PeerNetworkProps {
   peers: Peer[];
+  onShowToast: (msg: string) => void;
 }
 
-export const PeerNetwork: React.FC<PeerNetworkProps> = ({ peers }) => {
+export const PeerNetwork: React.FC<PeerNetworkProps> = ({ peers, onShowToast }) => {
+  const navigate = useNavigate();
+  const [connectedPeers, setConnectedPeers] = useState<Record<string, boolean>>({});
+
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('');
   };
@@ -22,17 +27,24 @@ export const PeerNetwork: React.FC<PeerNetworkProps> = ({ peers }) => {
     return colorSchemes[index % colorSchemes.length];
   };
 
+  const handleConnect = (peerId: string, peerName: string) => {
+    if (connectedPeers[peerId]) return;
+    setConnectedPeers(prev => ({ ...prev, [peerId]: true }));
+    onShowToast(`Connection request sent to ${peerName}`);
+  };
+
   return (
     <Card>
       <CardHeader>
         <span className="card-tab tab-marigold">PN</span>
         <CardTitle>Peer network</CardTitle>
-        <span className="card-link">See all</span>
+        <span className="card-link" onClick={() => navigate(ROUTES.PEER_MATCH)}>See all</span>
       </CardHeader>
       <CardContent>
         <div className="peer-grid">
           {peers.map((peer, index) => {
             const colors = getColors(index);
+            const isConnected = connectedPeers[peer.id];
             return (
               <div key={peer.id} className="rail-peer">
                 <div 
@@ -47,7 +59,12 @@ export const PeerNetwork: React.FC<PeerNetworkProps> = ({ peers }) => {
                 </div>
                 <div className="rail-peer-right">
                   <span className="match-pct">{peer.matchPercentage}%</span>
-                  <Button className="connect-btn">Connect</Button>
+                  <Button 
+                    className={`connect-btn ${isConnected ? 'sent' : ''}`}
+                    onClick={() => handleConnect(peer.id, peer.name)}
+                  >
+                    {isConnected ? 'Request Sent' : 'Connect'}
+                  </Button>
                 </div>
               </div>
             );

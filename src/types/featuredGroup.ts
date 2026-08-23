@@ -6,4 +6,5 @@ export interface FeaturedGroup {
   memberCount: number;
   activityStatus: string;
   meetingSchedule: string;
+  workspaceId?: string;
 }

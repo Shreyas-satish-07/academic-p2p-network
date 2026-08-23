@@ -2,7 +2,7 @@ import type { DashboardStudent, Deadline, MessageItem, RecommendedGroup, Learnin
 import type { Peer } from '../types/peer';
 
 export const CURRENT_STUDENT: DashboardStudent = {
-  name: 'Shreyas',
+  name: 'Shreyas Rao',
   term: 'SEM 1 · CSE',
   college: 'BMS COLLEGE OF ENGINEERING',
   profileCompletion: 75,
@@ -180,25 +180,27 @@ export const LEARNING_PROGRESS: LearningProgressItem[] = [
 export const ACTIVE_COLLABORATIONS: CollaborationItem[] = [
   {
     id: '1',
-    title: 'Team Nimbus — Campus Navigator App',
-    progressText: '7 / 10 tasks',
-    percentage: 70,
+    title: 'Academic Peer-to-Peer Network',
+    progressText: '8 / 10 tasks',
+    percentage: 80,
     members: [
       { initials: 'AR', bgClass: 'var(--marigold-tint)', textClass: 'var(--marigold)' },
       { initials: 'RK', bgClass: 'var(--pine-tint)', textClass: 'var(--pine-dark)' },
       { initials: 'SM', bgClass: 'var(--slate-tint)', textClass: 'var(--slate)' },
       { initials: '+1', bgClass: 'var(--rust-tint)', textClass: 'var(--rust)' },
     ],
+    workspaceId: 'project-1',
   },
   {
     id: '2',
-    title: 'Research: Sentiment analysis on regional languages',
-    progressText: '3 / 6 tasks',
-    percentage: 50,
+    title: 'Research: OS Internals Circle',
+    progressText: '1 / 3 tasks',
+    percentage: 33,
     members: [
-      { initials: 'DP', bgClass: 'var(--pine-tint)', textClass: 'var(--pine-dark)' },
       { initials: 'AR', bgClass: 'var(--marigold-tint)', textClass: 'var(--marigold)' },
+      { initials: 'RK', bgClass: 'var(--pine-tint)', textClass: 'var(--pine-dark)' },
     ],
+    workspaceId: 'os-circle',
   },
 ];
 

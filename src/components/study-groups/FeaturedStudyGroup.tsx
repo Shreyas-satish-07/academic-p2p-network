@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FEATURED_STUDY_GROUP } from '../../data/studyGroupsData';
 import { Button } from '../ui/button';
 
 export const FeaturedStudyGroup: React.FC = () => {
+  const navigate = useNavigate();
   const [isJoined, setIsJoined] = useState(false);
 
   return (
@@ -36,16 +38,29 @@ export const FeaturedStudyGroup: React.FC = () => {
         </div>
         <div className="fg-actions">
           <span className="match-pct match-pct-lg">{FEATURED_STUDY_GROUP.matchPercentage}% match</span>
-          <Button 
-            className="fg-join" 
-            onClick={() => setIsJoined(!isJoined)}
-            style={{
-              backgroundColor: isJoined ? 'var(--line)' : 'var(--pine)',
-              color: isJoined ? 'var(--ink-soft)' : '#F6F4EC',
-            }}
-          >
-            {isJoined ? 'Joined' : 'Join group'}
-          </Button>
+          {isJoined && FEATURED_STUDY_GROUP.workspaceId ? (
+            <Button 
+              className="fg-join" 
+              onClick={() => navigate(`/messages?workspaceId=${FEATURED_STUDY_GROUP.workspaceId}`)}
+              style={{
+                backgroundColor: 'var(--pine)',
+                color: '#F6F4EC',
+              }}
+            >
+              Go to Workspace
+            </Button>
+          ) : (
+            <Button 
+              className="fg-join" 
+              onClick={() => setIsJoined(true)}
+              style={{
+                backgroundColor: 'var(--pine-tint)',
+                color: 'var(--pine-dark)',
+              }}
+            >
+              Join group
+            </Button>
+          )}
         </div>
       </div>
     </div>

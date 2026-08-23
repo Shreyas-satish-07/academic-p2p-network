@@ -24,7 +24,7 @@ export const PROJECTS: Project[] = [
     title: 'Academic Peer-to-Peer Network',
     description: 'A decentralized academic peer-to-peer network for sharing resources, discussions, and study session synchronization without a central server.',
     technologies: ['TypeScript', 'WebRTC', 'React', 'Tailwind CSS'],
-    status: 'Live',
+    status: 'In progress',
     featured: true,
     repositoryUrl: '#',
   },

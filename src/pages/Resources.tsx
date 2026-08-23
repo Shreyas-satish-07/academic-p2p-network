@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AppLayout from '../components/layout/AppLayout';
 import Button from '../components/ui/button';
@@ -7,14 +8,45 @@ import type { Resource } from '../types/resource';
 import '../styles/resources.css';
 
 export const Resources: React.FC = () => {
+  const location = useLocation();
   const [resources, setResources] = useState<Resource[]>(RECENT_RESOURCES);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedSubject, setSelectedSubject] = useState('All');
   const [sortBy, setSortBy] = useState<'recent' | 'popular'>('recent');
+  const [highlightedResourceId, setHighlightedResourceId] = useState<string | null>(null);
 
   // Share Resource Modal states
   const [showShareModal, setShowShareModal] = useState(false);
+
+  useEffect(() => {
+    if (location.state) {
+      const stateObj = location.state as any;
+      if (stateObj.openShareModal) {
+        handleOpenShareModal();
+      }
+      if (stateObj.searchQuery) {
+        setSearchQuery(stateObj.searchQuery);
+      }
+      if (stateObj.resourceId) {
+        const resId = String(stateObj.resourceId);
+        setActiveCategory('All');
+        setSelectedSubject('All');
+        setSearchQuery('');
+        setHighlightedResourceId(resId);
+        
+        // Scroll into view
+        setTimeout(() => {
+          const element = document.querySelector(`.library-resource-card[data-id="${resId}"]`);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 150);
+      }
+      // Clear location state to prevent repeating actions on page reloads/renders
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState('');
@@ -305,8 +337,15 @@ export const Resources: React.FC = () => {
               </div>
             ) : (
               <div className="resources-library-grid">
-                {sortedResources.map(res => (
-                  <div key={res.id} className="library-resource-card">
+                {sortedResources.map(res => {
+                  const isHighlighted = highlightedResourceId === res.id;
+                  return (
+                    <div 
+                      key={res.id} 
+                      data-id={res.id}
+                      className={`library-resource-card ${isHighlighted ? 'highlighted-resource' : ''}`}
+                      style={isHighlighted ? { borderColor: 'var(--marigold)', borderWidth: '2px', boxShadow: '0 0 16px rgba(212, 163, 89, 0.45)' } : undefined}
+                    >
                     <div className="library-card-header">
                       <div className="library-card-icon" style={{ background: res.bgClass, color: res.textClass }}>
                         {res.type === 'Research Paper' ? 'REP' : res.type === 'Cheat Sheet' ? 'CHT' : res.type === 'Presentation' ? 'PRE' : res.type?.substring(0, 3).toUpperCase()}
@@ -333,7 +372,8 @@ export const Resources: React.FC = () => {
                       </Button>
                     </div>
                   </div>
-                ))}
+                );
+              })}
               </div>
             )}
           </div>

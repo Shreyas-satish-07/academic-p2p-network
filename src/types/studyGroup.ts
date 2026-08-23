@@ -7,4 +7,5 @@ export interface StudyGroup {
   difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
   activityStatusText?: string;
   acronym?: string;
+  workspaceId?: string;
 }
